@@ -1,0 +1,7 @@
+*.png
+*.zip
+__pycache__
+rw/
+*.cpt
+ckpt
+*/__pycache__/
