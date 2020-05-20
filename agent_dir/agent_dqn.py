@@ -99,8 +99,8 @@ class AgentDQN(Agent):
         self.input_channels = 4
         self.num_actions = self.env.action_space.n
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.rw_dqn_path = args.rw_dqn_path
-        self.dqn_model_path = args.dqn_model_path
+        self.rw_path = args.rw_path
+        self.save_model_path = args.save_model_path
 
         # build target, online network
         self.target_net = self.build_model(args.dqn_mode, self.input_channels, self.num_actions)
@@ -109,7 +109,7 @@ class AgentDQN(Agent):
         self.online_net = self.online_net.cuda() if use_cuda else self.online_net
 
         if args.test_dqn:
-            self.load(args.dqn_model_path)
+            self.load(args.save_model_path)
 
         # discounted reward
         self.gamma = args.gamma
@@ -118,7 +118,7 @@ class AgentDQN(Agent):
         self.train_freq = 4 # frequency to train the online network
         self.learning_start = 10000 # before we start to update our network, we wait a few steps first to fill the replay.
         self.batch_size = args.batch_size
-        self.num_timesteps = 3000000 # total training steps
+        self.num_timesteps = 200000 # total training steps
         self.display_freq = 10 # frequency to display training progress
         self.save_freq = 200000 # frequency to save the model
         self.target_update_freq = args.target_update_freq # frequency to update target network
@@ -249,11 +249,13 @@ class AgentDQN(Agent):
             state = torch.from_numpy(state).permute(2,0,1).unsqueeze(0).to(self.device)
             
             done = False
+            the_reward = 0
             while(not done):
                 # select and perform action
                 action = self.make_action(state).to(self.device)
                 next_state, reward, done, _ = self.env.step(action.item())
                 total_reward += reward
+                the_reward += reward
                 reward = torch.tensor([reward], device=self.device)
 
                 # process new state
@@ -275,18 +277,18 @@ class AgentDQN(Agent):
 
                 self.steps += 1
 
+            rw_list.append(the_reward)
             if episodes_done_num % self.display_freq == 0:
                 total_reward /= self.display_freq
                 print('Episode: %d | Steps: %d/%d | Avg reward: %f | loss: %f '%
                         (episodes_done_num, self.steps, self.num_timesteps, total_reward, loss))
                 if best_reward < total_reward:
                     best_reward = total_reward
-                    self.save(self.dqn_model_path)
-                    np.save(self.rw_dqn_path, rw_list)
-                rw_list.append(total_reward)
+                    self.save(self.save_model_path)
+                    np.save(self.rw_path, rw_list)
                 total_reward = 0
 
             episodes_done_num += 1
             if self.steps > self.num_timesteps:
                 break
-        np.save(self.rw_dqn_path, rw_list)
+        np.save(self.rw_path, rw_list)
