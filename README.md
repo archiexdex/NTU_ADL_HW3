@@ -6,7 +6,7 @@ Type the following command to install OpenAI Gym Atari environment.
 ```sh
 pip install opencv-python gym gym[atari]
 sh download.sh
-it will download checkpoints, put into ckpt
+# it will download checkpoints, put into ckpt
 ```
 
 Please refer to [OpenAI's page](https://github.com/openai/gym) if you have any problem while installing.
@@ -24,14 +24,14 @@ If you want to see agent playing the game,
 training policy gradient:
 ```sh
 python3 main.py --train_pg
-you can run different pg mode
+# you can run different pg mode
 python3 main.py --train_pg --pg_mode ppo
 ```
 
 training DQN:
 ```sh
 python3 main.py --train_dqn
-you can run different dqn mode
+# you can run different dqn mode
 python3 main.py --train_dqn --dqn_mode duel
 ```
 
