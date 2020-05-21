@@ -39,6 +39,7 @@ plot results
 * `python3 plot.py`
 
 The plot results are as follows:
+
 ![image](https://github.com/archiexdex/NTU_ADL_HW3/blob/master/imgs/pg_reward.png)
 ![image](https://github.com/archiexdex/NTU_ADL_HW3/blob/master/imgs/pg_dif.png)
 ![image](https://github.com/archiexdex/NTU_ADL_HW3/blob/master/imgs/dqn_reward.png)
