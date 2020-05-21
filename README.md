@@ -11,7 +11,7 @@ sh download.sh
 
 Please refer to [OpenAI's page](https://github.com/openai/gym) if you have any problem while installing.
 
-## How to run :
+## How to run:
 testing policy gradient:
 * `$ python3 test.py --test_pg`
 
@@ -38,8 +38,14 @@ python3 main.py --train_dqn --dqn_mode duel
 plot results
 * `python3 plot.py`
 
-## Code structure
+The plot results are as follows:
+![image](https://github.com/archiexdex/NTU_ADL_HW3/blob/master/imgs/pg_reward.png)
+![image](https://github.com/archiexdex/NTU_ADL_HW3/blob/master/imgs/pg_dif.png)
+![image](https://github.com/archiexdex/NTU_ADL_HW3/blob/master/imgs/dqn_reward.png)
+![image](https://github.com/archiexdex/NTU_ADL_HW3/blob/master/imgs/dqn_diff_p2.png)
+![image](https://github.com/archiexdex/NTU_ADL_HW3/blob/master/imgs/dqn_diff_p3.png)
 
+## Code structure
 ```
 .
 ├── agent_dir (all agents are placed here)
