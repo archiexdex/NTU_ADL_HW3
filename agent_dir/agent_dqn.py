@@ -99,8 +99,8 @@ class AgentDQN(Agent):
         self.input_channels = 4
         self.num_actions = self.env.action_space.n
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.rw_path = args.rw_path
-        self.save_model_path = args.save_model_path
+        self.rw_path = args.rw_dqn_path if args.dqn_mode == 'dqn' else args.rw_duel_path
+        self.save_model_path = args.dqn_model_path if args.dqn_mode == 'dqn' else args.duel_model_path
 
         # build target, online network
         self.target_net = self.build_model(args.dqn_mode, self.input_channels, self.num_actions)
@@ -109,7 +109,7 @@ class AgentDQN(Agent):
         self.online_net = self.online_net.cuda() if use_cuda else self.online_net
 
         if args.test_dqn:
-            self.load(args.save_model_path)
+            self.load(self.save_model_path)
 
         # discounted reward
         self.gamma = args.gamma
@@ -118,7 +118,7 @@ class AgentDQN(Agent):
         self.train_freq = 4 # frequency to train the online network
         self.learning_start = 10000 # before we start to update our network, we wait a few steps first to fill the replay.
         self.batch_size = args.batch_size
-        self.num_timesteps = 200000 # total training steps
+        self.num_timesteps = 2000000 # total training steps
         self.display_freq = 10 # frequency to display training progress
         self.save_freq = 200000 # frequency to save the model
         self.target_update_freq = args.target_update_freq # frequency to update target network
